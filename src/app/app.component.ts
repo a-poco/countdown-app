@@ -1,16 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { format, parse } from 'date-fns';
 import { differenceInSeconds, formatDate } from 'date-fns';
+
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [CommonModule, RouterOutlet, FormsModule],
   templateUrl: './app.component.html',
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = '';
   inputTitle = '';
   showTitle = false;
@@ -21,6 +22,19 @@ export class AppComponent {
   targetDate: Date | null = null;
 
   ngOnInit() {
+    const savedTitle = localStorage.getItem('countdownTitle');
+    const savedDate = localStorage.getItem('countdownDate');
+
+    if (savedTitle && savedDate) {
+      this.title = savedTitle;
+      this.inputTitle = savedTitle;
+      this.inputDate = savedDate;
+      this.targetDate = parse(savedDate, 'yyyy-MM-dd', new Date());
+      this.showTitle = true;
+      this.showDate = true;
+      this.updateDuration();
+    }
+
     setInterval(() => {
       this.updateDuration();
     }, 1000);
@@ -31,6 +45,7 @@ export class AppComponent {
       if (this.inputTitle === '' || this.inputDate === '') {
         return;
       }
+
       const parsedDate = parse(this.inputDate, 'yyyyMMdd', new Date());
       const formattedDate = format(parsedDate, 'yyyy-MM-dd');
 
@@ -43,6 +58,9 @@ export class AppComponent {
           this.updateDuration();
           this.showDate = true;
           this.inputDate = formattedDate;
+
+          localStorage.setItem('countdownTitle', this.title);
+          localStorage.setItem('countdownDate', this.inputDate);
         } else {
           throw new Error('Invalid date');
         }
