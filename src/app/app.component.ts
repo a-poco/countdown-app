@@ -3,13 +3,13 @@ import { RouterOutlet } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { format, parse } from 'date-fns';
-import { differenceInSeconds, formatDate } from 'date-fns';
+import { differenceInSeconds } from 'date-fns';
 import { capitalizeWords } from './utils';
-
+import { FitTextDirective } from './fit-text.directive';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, FormsModule],
+  imports: [CommonModule, RouterOutlet, FormsModule, FitTextDirective],
   templateUrl: './app.component.html',
 })
 export class AppComponent implements OnInit {
