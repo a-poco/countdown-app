@@ -71,7 +71,7 @@ export class AppComponent {
       const minutes = Math.floor(totalSeconds / 60);
       const seconds = totalSeconds % 60;
 
-      this.date = `${days}days, ${hours}h, ${minutes}m, ${seconds}s`;
+      this.date = `${days} days, ${hours}h, ${minutes}m, ${seconds}s`;
     }
   }
 }
