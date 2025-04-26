@@ -1,47 +1,56 @@
-<div class="min-h-screen flex flex-col items-center justify-center bg-gray-100">
-  <div class="flex flex-col items-center justify-center mb-16">
+<div class="min-h-screen w-full bg-gray-100">
+  <div class="flex flex-col items-center justify-center mb-16 w-full mx-auto">
     <h1
       *ngIf="showTitle && title"
-      class="responsive-title text-6xl font-bold text-[#72035D] mb-8"
+      class="w-full whitespace-nowrap overflow-hidden text-center font-bold text-[#72035D] px-4"
+      [style.fontSize]="'clamp(1rem, 9vw, 10rem)'"
     >
       Time to {{ title }}
     </h1>
-    <h1 *ngIf="showDate && date" class="text-6xl mb-8">
+    <h1
+      *ngIf="showDate && date"
+      class="w-full whitespace-nowrap overflow-hidden text-center pb-8 px-4"
+      [style.fontSize]="'clamp(1.5rem, 9vw, 10rem)'"
+    >
       {{ date }}
     </h1>
   </div>
-  <div class="relative">
-    <input
-      type="text"
-      id="title"
-      class="block px-2.5 pb-2.5 pt-4 w-[278px] h-[54px] text-sm bg-transparent border rounded-md border-black appearance-none focus:outline-none focus:ring-0 peer"
-      placeholder=" "
-      [(ngModel)]="inputTitle"
-      (keyup.enter)="onEnter($event)"
-    />
-    <label
-      for="title"
-      class="absolute text-xl text-black duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-gray-100 px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-1 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
-    >
-      Title
-    </label>
-  </div>
-  <div class="relative mt-[54px]">
-    <input
-      type="text"
-      id="date"
-      class="block px-2.5 pb-2.5 pt-4 w-[278px] h-[54px] text-sm bg-transparent border rounded-md border-black appearance-none focus:outline-none focus:ring-0 peer"
-      placeholder="YYYYMMDD"
-      [(ngModel)]="inputDate"
-      (keyup.enter)="onEnter($event)"
-      maxlength="8"
-    />
-    <label
-      for="date"
-      class="absolute text-xl text-black duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-gray-100 px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-1 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
-    >
-      Date (YYYYMMDD)
-    </label>
+  <div
+    class="flex md:flex-row flex-col md:items-center md:justify-center gap-8 mt-[54px]"
+  >
+    <div class="relative">
+      <input
+        type="text"
+        id="title"
+        class="block px-2.5 pb-2.5 pt-4 w-[278px] h-[54px] text-sm bg-transparent border rounded-md border-black appearance-none focus:outline-none focus:ring-0 peer"
+        placeholder=" "
+        [(ngModel)]="inputTitle"
+        (keyup.enter)="onEnter($event)"
+      />
+      <label
+        for="title"
+        class="absolute text-xl text-black duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-gray-100 px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-1 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
+      >
+        Title
+      </label>
+    </div>
+    <div class="relative">
+      <input
+        type="text"
+        id="date"
+        class="block px-2.5 pb-2.5 pt-4 w-[278px] h-[54px] text-sm bg-transparent border rounded-md border-black appearance-none focus:outline-none focus:ring-0 peer"
+        placeholder="YYYYMMDD"
+        [(ngModel)]="inputDate"
+        (keyup.enter)="onEnter($event)"
+        maxlength="8"
+      />
+      <label
+        for="date"
+        class="absolute text-xl text-black duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-gray-100 px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-1 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
+      >
+        Date (YYYYMMDD)
+      </label>
+    </div>
   </div>
 </div>
 
