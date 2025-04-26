@@ -4,12 +4,14 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { format, parse } from 'date-fns';
 import { differenceInSeconds, formatDate } from 'date-fns';
+import { capitalizeWords } from './utils';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [CommonModule, RouterOutlet, FormsModule],
   templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
   title = '';
@@ -26,7 +28,7 @@ export class AppComponent implements OnInit {
     const savedDate = localStorage.getItem('countdownDate');
 
     if (savedTitle && savedDate) {
-      this.title = savedTitle;
+      this.title = capitalizeWords(savedTitle);
       this.inputTitle = savedTitle;
       this.inputDate = savedDate;
       this.targetDate = parse(savedDate, 'yyyy-MM-dd', new Date());

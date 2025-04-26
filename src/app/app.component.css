@@ -1,0 +1,11 @@
+.responsive-title {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  font-size: clamp(1.5rem, 8vw, 4rem);
+  padding: 0 1rem;
+  max-width: 90vw;
+  margin: 0 auto;
+} 
