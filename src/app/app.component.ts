@@ -3,8 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { format, parse } from 'date-fns';
-import { differenceInSeconds } from 'date-fns';
-import { capitalizeWords } from './utils';
+import { capitalizeWords, isValidDate, calculateCountdown } from './utils';
 import { FitTextDirective } from './fit-text.directive';
 
 @Component({
@@ -53,7 +52,7 @@ export class AppComponent implements OnInit {
       const formattedDate = format(parsedDate, 'yyyy-MM-dd');
 
       try {
-        if (this.isValidDate(parsedDate)) {
+        if (isValidDate(parsedDate)) {
           this.title = this.inputTitle;
           this.showTitle = true;
           this.inputDate = formattedDate;
@@ -74,32 +73,14 @@ export class AppComponent implements OnInit {
     }
   }
 
-  private isValidDate(date: Date): boolean {
-    const now = new Date();
-    if (!(date instanceof Date) || isNaN(date.getTime())) {
-      return false;
-    }
-    return date > now;
-  }
-
   private updateDuration() {
     if (!this.displayDate) {
       return;
     }
 
     const targetDate = parse(this.displayDate, 'yyyy-MM-dd', new Date());
-    if (this.isValidDate(targetDate)) {
-      const now = new Date();
-      let totalSeconds = differenceInSeconds(targetDate, now);
-
-      const days = Math.floor(totalSeconds / (3600 * 24));
-      totalSeconds %= 3600 * 24;
-      const hours = Math.floor(totalSeconds / 3600);
-      totalSeconds %= 3600;
-      const minutes = Math.floor(totalSeconds / 60);
-      const seconds = totalSeconds % 60;
-
-      this.date = `${days} days, ${hours}h, ${minutes}m, ${seconds}s`;
+    if (isValidDate(targetDate)) {
+      this.date = calculateCountdown(targetDate);
     }
   }
 }
