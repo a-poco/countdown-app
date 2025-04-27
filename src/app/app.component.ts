@@ -55,25 +55,26 @@ export class AppComponent implements OnInit {
           this.showTitle = true;
           this.inputDate = formattedDate;
           this.showDate = true;
+          this.updateDuration();
 
           localStorage.setItem('countdownTitle', this.title);
           localStorage.setItem('countdownDate', this.inputDate);
-
-          this.updateDuration();
         } else {
           throw new Error('Invalid date');
         }
       } catch (error) {
-        alert(
-          'Please enter a valid date in YYYYMMDD format (e.g., 20241225 for December 25, 2024)'
-        );
+        alert('Please enter a valid date');
         this.inputDate = '';
       }
     }
   }
 
   private isValidDate(date: Date): boolean {
-    return date instanceof Date && !isNaN(date.getTime());
+    const now = new Date();
+    if (!(date instanceof Date) || isNaN(date.getTime())) {
+      return false;
+    }
+    return date > now;
   }
 
   private updateDuration() {
