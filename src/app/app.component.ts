@@ -46,7 +46,8 @@ export class AppComponent implements OnInit {
         return;
       }
 
-      const parsedDate = parse(this.inputDate, 'yyyyMMdd', new Date());
+      const cleanDate = this.inputDate.replace(/\D/g, '');
+      const parsedDate = parse(cleanDate, 'yyyyMMdd', new Date());
       const formattedDate = format(parsedDate, 'yyyy-MM-dd');
 
       try {
