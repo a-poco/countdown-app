@@ -13,16 +13,24 @@ import { FitTextDirective } from './fit-text.directive';
   templateUrl: './app.component.html',
 })
 export class AppComponent implements OnInit {
-  title = '';
-  inputTitle = '';
-  showTitle = false;
-  date = '';
-  inputDate = '';
-  displayDate = '';
-  showDate = false;
-  now = new Date();
+  title: string = '';
+  date: string = '';
+
+  inputTitle: string = '';
+  inputDate: string = '';
+
+  showTitle: boolean = false;
+  showDate: boolean = false;
+
+  displayDate: string = '';
+  now: Date = new Date();
 
   ngOnInit() {
+    this.loadSavedData();
+    this.startCountdown();
+  }
+
+  private loadSavedData(): void {
     const savedTitle = localStorage.getItem('countdownTitle');
     const savedDate = localStorage.getItem('countdownDate');
 
@@ -35,45 +43,67 @@ export class AppComponent implements OnInit {
       this.showDate = true;
       this.updateDuration();
     }
-
+  }
+  private startCountdown(): void {
     setInterval(() => {
       this.updateDuration();
     }, 1000);
   }
 
-  onEnter(event: Event) {
-    if ((event as KeyboardEvent).key === 'Enter') {
-      if (this.inputTitle === '' || this.inputDate === '') {
-        return;
+  onEnter(event: Event): void {
+    if ((event as KeyboardEvent).key !== 'Enter') {
+      return;
+    }
+
+    if (!this.hasValidInput()) {
+      return;
+    }
+
+    try {
+      const formattedDate = this.formatInputDate();
+      if (this.isValidInputDate(formattedDate)) {
+        this.saveInputData(formattedDate);
+      } else {
+        throw new Error('Invalid date');
       }
-
-      const cleanDate = this.inputDate.replace(/\D/g, '');
-      const parsedDate = parse(cleanDate, 'yyyyMMdd', new Date());
-      const formattedDate = format(parsedDate, 'yyyy-MM-dd');
-
-      try {
-        if (isValidDate(parsedDate)) {
-          this.title = this.inputTitle;
-          this.showTitle = true;
-          this.inputDate = formattedDate;
-          this.displayDate = formattedDate;
-          this.showDate = true;
-          this.updateDuration();
-
-          localStorage.setItem('countdownTitle', this.title);
-          localStorage.setItem('countdownDate', this.inputDate);
-        } else {
-          throw new Error('Invalid date');
-        }
-      } catch (error) {
-        alert('Please enter a valid date');
-        this.inputDate = '';
-        this.displayDate = '';
-      }
+    } catch (error) {
+      this.handleInvalidDate();
     }
   }
 
-  private updateDuration() {
+  private hasValidInput(): boolean {
+    return this.inputTitle !== '' && this.inputDate !== '';
+  }
+
+  private formatInputDate(): string {
+    const cleanDate = this.inputDate.replace(/\D/g, '');
+    const parsedDate = parse(cleanDate, 'yyyyMMdd', new Date());
+    return format(parsedDate, 'yyyy-MM-dd');
+  }
+
+  private isValidInputDate(formattedDate: string): boolean {
+    const parsedDate = parse(formattedDate, 'yyyy-MM-dd', new Date());
+    return isValidDate(parsedDate);
+  }
+
+  private saveInputData(formattedDate: string): void {
+    this.title = this.inputTitle;
+    this.showTitle = true;
+    this.inputDate = formattedDate;
+    this.displayDate = formattedDate;
+    this.showDate = true;
+    this.updateDuration();
+
+    localStorage.setItem('countdownTitle', this.title);
+    localStorage.setItem('countdownDate', this.inputDate);
+  }
+
+  private handleInvalidDate(): void {
+    alert('Please enter a valid date');
+    this.inputDate = '';
+    this.displayDate = '';
+  }
+  private updateDuration(): void {
     if (!this.displayDate) {
       return;
     }
