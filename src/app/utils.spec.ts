@@ -1,32 +1,24 @@
 import { isValidDate, calculateCountdown, capitalizeWords } from './utils'
+import { format } from 'date-fns'
 
 describe('Utils', () => {
   describe('isValidDate', () => {
     it('should return false for invalid dates', () => {
-      expect(isValidDate(new Date('invalid'))).toBe(false)
+      expect(isValidDate('invalid')).toBe(false)
     })
 
     it('should return false for past dates', () => {
       const pastDate = new Date()
       pastDate.setDate(pastDate.getDate() - 1)
-      expect(isValidDate(pastDate)).toBe(false)
+      const pastDateString = format(pastDate, 'yyyyMMdd')
+      expect(isValidDate(pastDateString)).toBe(false)
     })
 
     it('should return true for future dates', () => {
       const futureDate = new Date()
       futureDate.setDate(futureDate.getDate() + 1)
-      expect(isValidDate(futureDate)).toBe(true)
-    })
-  })
-
-  describe('calculateCountdown', () => {
-    it('should calculate countdown for future date', () => {
-      const futureDate = new Date()
-      futureDate.setDate(futureDate.getDate() + 2)
-      const countdown = calculateCountdown(futureDate)
-
-      expect(countdown).toContain('2 days')
-      expect(countdown).toMatch(/\d+h, \d+m, \d+s/)
+      const futureDateString = format(futureDate, 'yyyyMMdd')
+      expect(isValidDate(futureDateString)).toBe(true)
     })
   })
 

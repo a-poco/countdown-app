@@ -44,6 +44,7 @@ export class AppComponent implements OnInit {
       this.updateDuration()
     }
   }
+
   private startCountdown(): void {
     setInterval(() => {
       this.updateDuration()
@@ -54,39 +55,25 @@ export class AppComponent implements OnInit {
     if ((event as KeyboardEvent).key !== 'Enter') {
       return
     }
+    this.saveInputData()
+  }
 
-    if (!this.hasValidInput()) {
+  private saveInputData(): void {
+    if (this.inputTitle.trim() === '') {
+      this.handleInvalidTitle()
       return
     }
 
-    try {
-      const formattedDate = this.formatInputDate()
-      if (this.isValidInputDate(formattedDate)) {
-        this.saveInputData(formattedDate)
-      } else {
-        throw new Error('Invalid date')
-      }
-    } catch (error) {
+    const yyyyMMddDate = this.inputDate.replace(/\D/g, '')
+    const isDateValid = isValidDate(yyyyMMddDate)
+    if (!isDateValid) {
       this.handleInvalidDate()
+      return
     }
-  }
 
-  private hasValidInput(): boolean {
-    return this.inputTitle !== '' && this.inputDate !== ''
-  }
+    const parsedDate = parse(yyyyMMddDate, 'yyyyMMdd', new Date())
+    const formattedDate = format(parsedDate, 'yyyy-MM-dd')
 
-  private formatInputDate(): string {
-    const cleanDate = this.inputDate.replace(/\D/g, '')
-    const parsedDate = parse(cleanDate, 'yyyyMMdd', new Date())
-    return format(parsedDate, 'yyyy-MM-dd')
-  }
-
-  private isValidInputDate(formattedDate: string): boolean {
-    const parsedDate = parse(formattedDate, 'yyyy-MM-dd', new Date())
-    return isValidDate(parsedDate)
-  }
-
-  private saveInputData(formattedDate: string): void {
     this.title = this.inputTitle
     this.showTitle = true
     this.inputDate = formattedDate
@@ -103,14 +90,16 @@ export class AppComponent implements OnInit {
     this.inputDate = ''
     this.displayDate = ''
   }
+
+  private handleInvalidTitle(): void {
+    alert('Please enter a title')
+    this.inputTitle = ''
+  }
+
   private updateDuration(): void {
     if (!this.displayDate) {
       return
     }
-
-    const targetDate = parse(this.displayDate, 'yyyy-MM-dd', new Date())
-    if (isValidDate(targetDate)) {
-      this.date = calculateCountdown(targetDate)
-    }
+    this.date = calculateCountdown(this.displayDate)
   }
 }

@@ -1,15 +1,22 @@
 import { parse, differenceInSeconds } from 'date-fns'
 
-export function isValidDate(date: Date): boolean {
-  const now = new Date()
-  if (!(date instanceof Date) || isNaN(date.getTime())) {
+export function isValidDate(dateString: string): boolean {
+  try {
+    const date = parse(dateString, 'yyyyMMdd', new Date())
+    const now = new Date()
+    if (isNaN(date.getTime())) {
+      return false
+    }
+    return date > now
+  } catch (error) {
     return false
   }
-  return date > now
 }
 
-export function calculateCountdown(targetDate: Date): string {
+export function calculateCountdown(targetDateString: string): string {
   const now = new Date()
+  const targetDate = new Date(targetDateString)
+
   let totalSeconds = differenceInSeconds(targetDate, now)
 
   const days = Math.floor(totalSeconds / (3600 * 24))
