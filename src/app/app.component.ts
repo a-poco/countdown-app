@@ -19,6 +19,7 @@ export class AppComponent implements OnInit {
   showTitle = false;
   date = '';
   inputDate = '';
+  displayDate = '';
   showDate = false;
   now = new Date();
 
@@ -30,6 +31,7 @@ export class AppComponent implements OnInit {
       this.title = capitalizeWords(savedTitle);
       this.inputTitle = savedTitle;
       this.inputDate = savedDate;
+      this.displayDate = savedDate;
       this.showTitle = true;
       this.showDate = true;
       this.updateDuration();
@@ -55,6 +57,7 @@ export class AppComponent implements OnInit {
           this.title = this.inputTitle;
           this.showTitle = true;
           this.inputDate = formattedDate;
+          this.displayDate = formattedDate;
           this.showDate = true;
           this.updateDuration();
 
@@ -66,6 +69,7 @@ export class AppComponent implements OnInit {
       } catch (error) {
         alert('Please enter a valid date');
         this.inputDate = '';
+        this.displayDate = '';
       }
     }
   }
@@ -79,7 +83,11 @@ export class AppComponent implements OnInit {
   }
 
   private updateDuration() {
-    const targetDate = parse(this.inputDate, 'yyyy-MM-dd', new Date());
+    if (!this.displayDate) {
+      return;
+    }
+
+    const targetDate = parse(this.displayDate, 'yyyy-MM-dd', new Date());
     if (this.isValidDate(targetDate)) {
       const now = new Date();
       let totalSeconds = differenceInSeconds(targetDate, now);
