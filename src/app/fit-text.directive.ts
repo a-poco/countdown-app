@@ -4,10 +4,14 @@ import {
   HostListener,
   OnDestroy,
   AfterViewInit,
+  Input,
+  SimpleChanges,
+  OnChanges,
 } from '@angular/core';
 
 @Directive({ selector: '[fitText]' })
-export class FitTextDirective implements AfterViewInit, OnDestroy {
+export class FitTextDirective implements AfterViewInit, OnDestroy, OnChanges {
+  @Input() content: string = '';
   @HostListener('window:resize')
   onWindowResize() {
     this.resizeText();
@@ -18,6 +22,12 @@ export class FitTextDirective implements AfterViewInit, OnDestroy {
   ngAfterViewInit() {
     this.el.nativeElement.style.whiteSpace = 'nowrap';
     this.resizeText();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['content']) {
+      setTimeout(() => this.resizeText());
+    }
   }
 
   private resizeText() {

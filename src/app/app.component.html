@@ -2,6 +2,7 @@
   <div class="flex flex-col items-center justify-center mb-16 w-full mx-auto">
     <h1
       fitText
+      [content]="title"
       *ngIf="showTitle && title"
       class="w-full whitespace-nowrap overflow-hidden text-center font-bold text-[#72035D] px-4"
     >
@@ -9,6 +10,7 @@
     </h1>
     <h1
       fitText
+      [content]="date"
       *ngIf="showDate && date"
       class="w-full whitespace-nowrap overflow-hidden text-center pb-8 px-4"
     >
