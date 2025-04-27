@@ -6,6 +6,7 @@ import { format, parse } from 'date-fns';
 import { differenceInSeconds } from 'date-fns';
 import { capitalizeWords } from './utils';
 import { FitTextDirective } from './fit-text.directive';
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -20,7 +21,6 @@ export class AppComponent implements OnInit {
   inputDate = '';
   showDate = false;
   now = new Date();
-  targetDate: Date | null = null;
 
   ngOnInit() {
     const savedTitle = localStorage.getItem('countdownTitle');
@@ -30,7 +30,6 @@ export class AppComponent implements OnInit {
       this.title = capitalizeWords(savedTitle);
       this.inputTitle = savedTitle;
       this.inputDate = savedDate;
-      this.targetDate = parse(savedDate, 'yyyy-MM-dd', new Date());
       this.showTitle = true;
       this.showDate = true;
       this.updateDuration();
@@ -51,17 +50,16 @@ export class AppComponent implements OnInit {
       const formattedDate = format(parsedDate, 'yyyy-MM-dd');
 
       try {
-        this.targetDate = parse(this.inputDate, 'yyyyMMdd', new Date());
-
-        if (this.isValidDate(this.targetDate)) {
+        if (this.isValidDate(parsedDate)) {
           this.title = this.inputTitle;
           this.showTitle = true;
-          this.updateDuration();
-          this.showDate = true;
           this.inputDate = formattedDate;
+          this.showDate = true;
 
           localStorage.setItem('countdownTitle', this.title);
           localStorage.setItem('countdownDate', this.inputDate);
+
+          this.updateDuration();
         } else {
           throw new Error('Invalid date');
         }
@@ -75,13 +73,14 @@ export class AppComponent implements OnInit {
   }
 
   private isValidDate(date: Date): boolean {
-    return date instanceof Date;
+    return date instanceof Date && !isNaN(date.getTime());
   }
 
   private updateDuration() {
-    if (this.targetDate) {
+    const targetDate = parse(this.inputDate, 'yyyy-MM-dd', new Date());
+    if (this.isValidDate(targetDate)) {
       const now = new Date();
-      let totalSeconds = differenceInSeconds(this.targetDate, now);
+      let totalSeconds = differenceInSeconds(targetDate, now);
 
       const days = Math.floor(totalSeconds / (3600 * 24));
       totalSeconds %= 3600 * 24;
